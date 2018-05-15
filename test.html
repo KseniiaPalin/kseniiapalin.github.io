@@ -140,7 +140,7 @@ function start_handler(ev) {
  // three simultaneous touches, the first touchstart event will have 
  // targetTouches length of one, the second event will have a length 
  // of two, and so on.
- //ev.preventDefault();
+ ev.preventDefault();
  // Cache the touch points for later processing of 2-touch pinch/zoom
  if (ev.targetTouches.length == 2) {
    for (var i=0; i < ev.targetTouches.length; i++) {
@@ -169,7 +169,7 @@ function move_handler(ev) {
  // This function sets the target element's border to "dashed" to visualy
  // indicate the target received a move event.
  //
- //ev.preventDefault();
+ ev.preventDefault();
  if (logEvents) log("touchMove", ev, false);
  // To avoid too much color flashing many touchmove events are started,
  // don't update the background if two touch points are active
@@ -190,7 +190,7 @@ function press_handler(ev) {
 }
 
 function end_handler(ev) {
-  //ev.preventDefault();
+  ev.preventDefault();
   touchEndTime = new Date().getTime();
   var duration = touchEndTime - touchStartTime;
   if (logEvents) log(ev.type, ev, false, duration);
@@ -204,7 +204,7 @@ function end_handler(ev) {
 }
 
 function down_handler(ev) {
-    //ev.preventDefault();
+  ev.preventDefault();
 	pressEndTime = new Date().getTime();
 	var duration = pressEndTime - pressStartTime;
 	if (logEvents) log(ev.type, ev, false, duration);
