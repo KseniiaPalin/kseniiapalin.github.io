@@ -82,7 +82,7 @@ function log(name, ev, printTargetIds, duration = 0) {
 function clearLog(event) {
   var o = document.getElementsByTagName('output')[0];
   o.innerHTML = "";
-  var o = document.getElementsById('out');
+  var o = document.getElementById('out');
   o.innerHTML = "";
 }
 
@@ -230,11 +230,9 @@ function set_handlers(name) {
 }
 
 function set_type_handlers(name) {
- // Install event handlers for the given element
  var el=document.getElementById(name);
  el.onkeydown = down_handler;
  el.onkeypress = press_handler;
- // Use same handler for touchcancel and touchend
  el.onkeyup = up_handler;
 }
 
