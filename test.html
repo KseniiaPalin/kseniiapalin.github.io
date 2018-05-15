@@ -65,7 +65,7 @@ function log(name, ev, printTargetIds, duration = 0) {
 	                " ; changedTouches = " + ev.changedTouches.length + 
 	                " ; duration = " + duration;
   } else {
-  	s = name + "duration = " + duration;
+  	s = name + "; duration = " + duration;
   }
 
   o.innerHTML += s + " <br>";
@@ -213,7 +213,7 @@ function press_handler(ev) {
 
 function up_handler(ev) {
   pressStartTime = new Date().getTime();
-  if (logEvents) log(ev.name, ev, true);
+  if (logEvents) log(ev.type, ev, true);
   ev.target.style.background = "white";
   ev.target.style.border = "1px solid black";
   delete keys[ev.which];
