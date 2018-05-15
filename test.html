@@ -221,13 +221,27 @@ function set_handlers(name) {
  // Install event handlers for the given element
  var el=document.getElementById(name);
  el.ontouchstart = start_handler;
- el.onkeydown = down_handler;
+ //el.onkeydown = down_handler;
 
  el.ontouchmove = move_handler;
- el.onkeypress = press_handler;
+ //el.onkeypress = press_handler;
  // Use same handler for touchcancel and touchend
  el.ontouchcancel = end_handler;
  el.ontouchend = end_handler;
+ //el.onkeyup = up_handler;
+}
+
+function set_type_handlers(name) {
+ // Install event handlers for the given element
+ var el=document.getElementById(name);
+ //el.ontouchstart = start_handler;
+ el.onkeydown = down_handler;
+
+ //el.ontouchmove = move_handler;
+ el.onkeypress = press_handler;
+ // Use same handler for touchcancel and touchend
+ //el.ontouchcancel = end_handler;
+ //el.ontouchend = end_handler;
  el.onkeyup = up_handler;
 }
 
@@ -235,7 +249,7 @@ function init() {
  set_handlers("target1");
  set_handlers("target2");
  set_handlers("target3");
- set_handlers("target4");
+ set_type_handlers("target4");
 }
 
 function printKeys() {
