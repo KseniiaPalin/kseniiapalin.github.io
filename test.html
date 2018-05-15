@@ -155,14 +155,6 @@ function start_handler(ev) {
  update_background(ev);
 }
 
-function up_handler(ev) {
-	pressStartTime = new Date().getTime();
-	if (logEvents) log("touchStart", ev, true);
-	ev.target.style.background = "yellow";
-	delete keys[ev.which];
-  printKeys();
-}
-
 function move_handler(ev) {
  // Note: if the user makes more than one "simultaneous" touches, most browsers 
  // fire at least one touchmove event and some will fire several touchmoves.
@@ -186,11 +178,6 @@ function move_handler(ev) {
  handle_pinch_zoom(ev);
 }
 
-function press_handler(ev) {
- ev.target.style.border = "dashed";
-
-}
-
 function end_handler(ev) {
   ev.preventDefault();
   touchEndTime = new Date().getTime();
@@ -211,13 +198,28 @@ function down_handler(ev) {
 	var duration = pressEndTime - pressStartTime;
 	if (logEvents) log(ev.type, ev, false, duration);
 	// Restore background and border to original values
-	ev.target.style.background = "white";
+	ev.target.style.background = "yellow";
 	ev.target.style.border = "1px solid black";
 
 	keys[ev.which] = true;
   printKeys();
 
 }
+
+function press_handler(ev) {
+ ev.target.style.border = "dashed";
+
+}
+
+function up_handler(ev) {
+  pressStartTime = new Date().getTime();
+  if (logEvents) log(ev.name, ev, true);
+  ev.target.style.background = "white";
+  ev.target.style.border = "1px solid black";
+  delete keys[ev.which];
+  printKeys();
+}
+
 
 function set_handlers(name) {
  // Install event handlers for the given element
