@@ -209,6 +209,16 @@ function down_handler(ev) {
 function press_handler(ev) {
  ev.target.style.border = "dashed";
 
+ const currentCode = ev.which || ev.code;
+  let currentKey = ev.key;
+  if (!currentKey) {
+    currentKey = String.fromCharCode(currentCode);
+  }
+  str += currentKey;
+  ev.preventDefault();
+ // el.innerHTML = str;
+  printKeys(str);
+
 }
 
 function up_handler(ev) {
@@ -232,10 +242,35 @@ function set_handlers(name) {
 }
 
 function set_type_handlers(name) {
- var el=document.getElementById(name);
- el.onkeydown = down_handler;
- el.onkeypress = press_handler;
- el.onkeyup = up_handler;
+ //var el=document.getElementById(name);
+ //el.onkeydown = down_handler;
+ //el.onkeypress = press_handler;
+ //el.onkeyup = up_handler;
+
+ var input = document.getElementById('target4'),
+    oldValue,
+    newValue,
+    difference = function(value1, value2) {
+      var output = [];
+      for(i = 0; i < value2.length; i++) {
+        if(value1[i] !== value2[i]) {
+          output.push(value2[i]);
+        }
+      }
+      return output.join("");
+    },
+    keyDownHandler = function(e) {
+      oldValue = input.value;
+    },
+    inputHandler = function(e) {
+      newValue = input.value;
+      document.getElementById("out").innerHTML = difference(oldValue, newValue);
+    }
+;
+
+input.addEventListener('keydown', keyDownHandler);
+input.addEventListener('input', inputHandler);
+
 }
 
 function init() {
