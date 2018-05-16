@@ -295,9 +295,10 @@ function printKeys() {
     document.getElementById('out').innerHTML = html;
 }
 
-document.addEventListener('showkeyboard', function(){
-  alert('Keyboard shown')
-})
+window.addEventListener('deviceorientation', function(event) {
+  document.getElementById('orient').innerHTML = event.alpha + ' : ' + event.beta + ' : ' + event.gamma;
+});
+
 
 </script>
 <body onload="init();">
@@ -311,6 +312,7 @@ document.addEventListener('showkeyboard', function(){
  	<div>Multiple keys pressed?<span id="multiple"></span></div>
   <div>Pressed keys: <span id="pressed"></span></div>
   <div>Touched keys, N: <span id="touched"></span></div>
+  <div>Orientation <span id="orient"></span></div>
  </div>
 
 
