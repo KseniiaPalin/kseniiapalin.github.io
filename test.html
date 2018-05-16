@@ -295,10 +295,9 @@ function printKeys() {
     document.getElementById('out').innerHTML = html;
 }
 
-window.addEventListener('deviceorientation', function(event) {
-  alert(event.alpha + ' : ' + event.beta + ' : ' + event.gamma);
-});
-
+document.addEventListener('showkeyboard', function(){
+  alert('Keyboard shown')
+})
 
 </script>
 <body onload="init();">
