@@ -199,16 +199,6 @@ function set_type_handlers(name) {
 
  var input = document.getElementById('target'),
 
-    difference = function(value1, value2) {
-      var output = [];
-      for(i = 0; i < value2.length; i++) {
-        if(value1[i] !== value2[i]) {
-          output.push(value2[i]);
-        }
-      }
-      return output.join("");
-    },
-
     keyDownHandler = function(ev) {
       keys[ev.which] = true;
       pressStartTime = new Date().getTime();
@@ -241,6 +231,16 @@ input.addEventListener('keydown', keyDownHandler);
 input.addEventListener('keyup', keyUpHandler);
 input.addEventListener('input', inputHandler);
 
+}
+
+function difference(value1, value2) {
+  var output = [];
+  for(i = 0; i < value2.length; i++) {
+    if(value1[i] !== value2[i]) {
+      output.push(value2[i]);
+    }
+  }
+  return output.join("");
 }
 
 function isMultiple(keys){
