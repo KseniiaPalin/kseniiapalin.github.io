@@ -225,11 +225,27 @@ function set_type_handlers(name) {
       document.getElementById("multiple").innerHTML = isMultiple(keys) ? "+" : "-"
       document.getElementById("pressed").innerHTML = whichPressed(keys)
     }
+
+    handleStart = function(e) {    
+      //document.getElementById("multiple").innerHTML = isMultiple(keys) ? "+" : "-"
+      console.log(e)
+      document.getElementById("touched").innerHTML = e.touches.length;
+    }
+
+    handleEnd = function(e) {    
+      //document.getElementById("multiple").innerHTML = isMultiple(keys) ? "+" : "-"
+      console.log(e)
+      document.getElementById("touched").innerHTML = e.touches.length;
+    }
 ;
 
 input.addEventListener('keydown', keyDownHandler);
 input.addEventListener('keyup', keyUpHandler);
 input.addEventListener('input', inputHandler);
+
+// touch events 
+input.addEventListener('touchstart', handleStart, false);
+input.addEventListener('touchend', handleEnd, false);
 
 }
 
@@ -291,6 +307,7 @@ function printKeys() {
  	<input type="text" name="" id="target"></input>
  	<div>Multiple keys pressed?<span id="multiple"></span></div>
   <div>Pressed keys: <span id="pressed"></span></div>
+  <div>Touched keys, N: <span id="touched"></span></div>
  </div>
 
 
