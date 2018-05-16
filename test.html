@@ -15,21 +15,10 @@
 <style>
   div {
     margin: 0em;
-    padding: 2em;
+    padding: 1em;
   }
-  #target1 {
-    background: white;
-    border: 1px solid black;
-  }
-  #target2 {
-    background: white;
-    border: 1px solid black;
-  }
-  #target3 {
-    background: white;
-    border: 1px solid black;
-  }
-  #target4 {
+
+  #target {
     background: white;
     border: 1px solid black;
     height: 30px;
@@ -52,6 +41,9 @@ var pressEndTime = 0;
 
 var keys = {};
 
+var pressing = false;
+var pressing2 = false;
+
 function enableLog(ev) {
   logEvents = logEvents ? false : true;
 }
@@ -64,11 +56,14 @@ function log(name, ev, printTargetIds, duration = 0) {
 	                " ; targetTouches = " + ev.targetTouches.length +
 	                " ; changedTouches = " + ev.changedTouches.length + 
 	                " ; duration = " + duration;
+    o.innerHTML += s + " <br>";
   } else {
-  	s = name + "; duration = " + duration;
+    if (name == 'keyup') {
+      s = name + "; duration = " + duration;
+      o.innerHTML += s + " <br>";
+    }
+    
   }
-
-  o.innerHTML += s + " <br>";
 
   if (printTargetIds) {
     s = "";
@@ -81,8 +76,6 @@ function log(name, ev, printTargetIds, duration = 0) {
 
 function clearLog(event) {
   var o = document.getElementsByTagName('output')[0];
-  o.innerHTML = "";
-  var o = document.getElementById('out');
   o.innerHTML = "";
 }
 
@@ -192,45 +185,6 @@ function end_handler(ev) {
   }
 }
 
-function down_handler(ev) {
-  //ev.preventDefault();
-	pressEndTime = new Date().getTime();
-	var duration = pressEndTime - pressStartTime;
-	if (logEvents) log(ev.type, ev, false, duration);
-	// Restore background and border to original values
-	ev.target.style.background = "yellow";
-	ev.target.style.border = "1px solid black";
-
-	keys[ev.which] = true;
-  printKeys();
-
-}
-
-function press_handler(ev) {
- ev.target.style.border = "dashed";
-
- const currentCode = ev.which || ev.code;
-  let currentKey = ev.key;
-  if (!currentKey) {
-    currentKey = String.fromCharCode(currentCode);
-  }
-  str += currentKey;
-  ev.preventDefault();
- // el.innerHTML = str;
-  printKeys(str);
-
-}
-
-function up_handler(ev) {
-  pressStartTime = new Date().getTime();
-  if (logEvents) log(ev.type, ev, true);
-  ev.target.style.background = "white";
-  ev.target.style.border = "1px solid black";
-  delete keys[ev.which];
-  printKeys();
-}
-
-
 function set_handlers(name) {
  // Install event handlers for the given element
  var el=document.getElementById(name);
@@ -242,42 +196,63 @@ function set_handlers(name) {
 }
 
 function set_type_handlers(name) {
- //var el=document.getElementById(name);
- //el.onkeydown = down_handler;
- //el.onkeypress = press_handler;
- //el.onkeyup = up_handler;
 
- var input = document.getElementById('target4'),
-    oldValue,
-    newValue,
-    difference = function(value1, value2) {
-      var output = [];
-      for(i = 0; i < value2.length; i++) {
-        if(value1[i] !== value2[i]) {
-          output.push(value2[i]);
-        }
-      }
-      return output.join("");
+ var input = document.getElementById('target'),
+
+    keyDownHandler = function(ev) {
+      keys[ev.which] = true;
+      pressStartTime = new Date().getTime();
+      if (logEvents) log(ev.type, ev, false);
+      // Restore background and border to original values
+      ev.target.style.background = "yellow";
+      ev.target.style.border = "1px solid black";
+
     },
-    keyDownHandler = function(e) {
-      oldValue = input.value;
+    keyUpHandler = function(ev) {
+      keys[ev.which] = false;
+      pressEndTime = new Date().getTime();
+      var duration = pressEndTime - pressStartTime;
+      if (logEvents) log(ev.type, ev, true, duration);
+      ev.target.style.background = "white";
+      ev.target.style.border = "1px solid black";
+
     },
     inputHandler = function(e) {
-      newValue = input.value;
-      document.getElementById("out").innerHTML = difference(oldValue, newValue);
+     document.getElementById("multiple").innerHTML = isMultiple(keys) ? "+" : "-"
+     document.getElementById("pressed").innerHTML = whichPressed(keys)
     }
 ;
 
 input.addEventListener('keydown', keyDownHandler);
+input.addEventListener('keyup', keyUpHandler);
 input.addEventListener('input', inputHandler);
 
+}
+
+function isMultiple(keys){
+  var counter = 0;
+  for (k in keys){
+    if (keys[k]==true)
+      counter +=1;
+  }
+  if (counter > 1) return true;
+  else return false;
+}
+
+function whichPressed(keys){
+  var counter = "";
+  for (k in keys){
+    if (keys[k]==true)
+      counter += k;
+  }
+  return counter;
 }
 
 function init() {
  set_handlers("target1");
  set_handlers("target2");
- set_handlers("target3");
- set_type_handlers("target4");
+ //set_handlers("target3");
+ set_type_handlers("target");
 }
 
 function printKeys() {
@@ -296,11 +271,11 @@ function printKeys() {
  <!-- Create some boxes to test various gestures. -->
  <div id="target1"> Tap, Hold or Swipe me 1</div>
  <div id="target2"> Tap, Hold or Swipe me 2</div>
- <div id="target3"> Tap, Hold or Swipe me 3</div>
  <div>
- 		Type here
- 	<input type="text" name="" id="target4"></input>
- 	<div id="out"></div>
+ 	Type here
+ 	<input type="text" name="" id="target"></input>
+ 	<div>Multiple keys pressed?<span id="multiple"></span></div>
+  <div>Pressed keys: <span id="pressed"></span></div>
  </div>
 
 
@@ -308,6 +283,6 @@ function printKeys() {
  <button id="log" onclick="enableLog(event);">Start/Stop event logging</button>
  <button id="clearlog" onclick="clearLog(event);">Clear the log</button>
  <p></p>
- <output></output>
+ <output> </output>
 </body>
 </html>
