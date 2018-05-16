@@ -199,6 +199,18 @@ function set_type_handlers(name) {
 
  var input = document.getElementById('target'),
 
+    oldValue,
+    newValue,
+    difference = function(value1, value2) {
+      var output = [];
+      for(i = 0; i < value2.length; i++) {
+        if(value1[i] !== value2[i]) {
+          output.push(value2[i]);
+        }
+      }
+      return output.join("");
+    },
+
     keyDownHandler = function(ev) {
       keys[ev.which] = true;
       pressStartTime = new Date().getTime();
@@ -206,6 +218,8 @@ function set_type_handlers(name) {
       // Restore background and border to original values
       ev.target.style.background = "yellow";
       ev.target.style.border = "1px solid black";
+
+      oldValue = input.value;
 
     },
     keyUpHandler = function(ev) {
@@ -218,8 +232,10 @@ function set_type_handlers(name) {
 
     },
     inputHandler = function(e) {
-     document.getElementById("multiple").innerHTML = isMultiple(keys) ? "+" : "-"
-     document.getElementById("pressed").innerHTML = whichPressed(keys)
+      newValue = input.value;
+
+      document.getElementById("multiple").innerHTML = isMultiple(keys) ? "+" : "-"
+      document.getElementById("pressed").innerHTML = whichPressed(keys)
     }
 ;
 
@@ -245,6 +261,7 @@ function whichPressed(keys){
     if (keys[k]==true)
       counter += k;
   }
+  if counter == '229' counter = difference(oldValue, newValue);
   return counter;
 }
 
