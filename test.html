@@ -12,6 +12,10 @@
 <head>
 <title>Touch Events tutorial</title>
 <meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
 <style>
   div {
     margin: 0em;
@@ -195,11 +199,13 @@ function set_handlers(name) {
  el.ontouchend = end_handler;
 }
 
+
 function set_type_handlers(name) {
 
- var input = document.getElementById('target'),
+  var data = {};
 
-    var data = {}
+ var input = document.getElementById('target');
+
     keyDownHandler = function(ev) {
       keys[ev.which] = true;
       pressStartTime = new Date().getTime();
