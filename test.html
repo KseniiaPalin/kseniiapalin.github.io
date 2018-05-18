@@ -199,6 +199,7 @@ function set_type_handlers(name) {
 
  var input = document.getElementById('target'),
 
+    var data = {}
     keyDownHandler = function(ev) {
       keys[ev.which] = true;
       pressStartTime = new Date().getTime();
@@ -206,9 +207,18 @@ function set_type_handlers(name) {
       // Restore background and border to original values
       ev.target.style.background = "yellow";
       ev.target.style.border = "1px solid black";
-
       oldValue = input.value;
-
+      data = {
+        event: ev.type, 
+        key: ev.key,
+        char: ev.char,
+        input: input.value,
+        pressed: whichPressed(keys),
+        timestamp: new Date().getTime(),
+        browser: navigator.userAgent,
+        orientation : orientation 
+      }
+      saveLog(data);
     },
     keyUpHandler = function(ev) {
       keys[ev.which] = false;
@@ -217,7 +227,18 @@ function set_type_handlers(name) {
       if (logEvents) log(ev.type, ev, true, duration);
       ev.target.style.background = "white";
       ev.target.style.border = "1px solid black";
-
+      data = {
+        event: ev.type, 
+        key: ev.key,
+        char: ev.char,
+        input: input.value,
+        pressed: whichPressed(keys),
+        duration: duration,
+        timestamp: new Date().getTime(),
+        browser: navigator.userAgent,
+        orientation : orientation 
+      }
+      saveLog(data);
     },
     inputHandler = function(e) {
       newValue = input.value;
@@ -226,10 +247,10 @@ function set_type_handlers(name) {
       document.getElementById("pressed").innerHTML = whichPressed(keys)
     }
 
-    handleStart = function(e) {    
+    handleStart = function(ev) {    
       //document.getElementById("multiple").innerHTML = isMultiple(keys) ? "+" : "-"
-      console.log(e)
-      document.getElementById("touched").innerHTML = e.touches.length;
+      console.log(ev)
+      document.getElementById("touched").innerHTML = ev.touches.length;
     }
 
     handleEnd = function(e) {    
@@ -295,10 +316,23 @@ function printKeys() {
     document.getElementById('out').innerHTML = html;
 }
 
+var orientation = {}
 window.addEventListener('deviceorientation', function(event) {
   document.getElementById('orient').innerHTML = event.alpha + ' : ' + event.beta + ' : ' + event.gamma;
+  orientation["alpha"] = event.alpha
+  orientation["beta"] = event.beta
+  orientation["gamma"] = event.gamma
+
 });
 
+
+function saveLog(data){
+
+  $.ajax( { url: "https://api.mlab.com/api/1/databases/typingmaster/collections/keypresslog?apiKey=dM0WuvKr_Iv53Dy3Hj-6ovS2VdtOJgjC",
+      data: JSON.stringify( data ),
+      type: "POST",
+      contentType: "application/json" } );
+}
 
 </script>
 <body onload="init();">
@@ -307,7 +341,7 @@ window.addEventListener('deviceorientation', function(event) {
  <div id="target1"> Tap, Hold or Swipe me 1</div>
  <div id="target2"> Tap, Hold or Swipe me 2</div>
  <div>
- 	Type here
+ 	Type "The quick brown fox jumps over the lazy dog"
  	<input type="text" name="" id="target"></input>
  	<div>Multiple keys pressed?<span id="multiple"></span></div>
   <div>Pressed keys: <span id="pressed"></span></div>
