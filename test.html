@@ -246,7 +246,7 @@ function set_type_handlers(name) {
       }
       saveLog(data);
     },
-    inputHandler = function(e) {
+    inputHandler = function(ev) {
       newValue = input.value;
 
       document.getElementById("multiple").innerHTML = isMultiple(keys) ? "+" : "-"
