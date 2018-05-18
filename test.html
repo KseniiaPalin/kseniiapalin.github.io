@@ -251,6 +251,17 @@ function set_type_handlers(name) {
 
       document.getElementById("multiple").innerHTML = isMultiple(keys) ? "+" : "-"
       document.getElementById("pressed").innerHTML = whichPressed(keys)
+
+      data = {
+        event: ev.type, 
+        input: input.value,
+        pressed: whichPressed(keys),
+        timestamp: new Date().getTime(),
+        browser: navigator.userAgent,
+        orientation : orientation 
+      }
+      saveLog(data);
+
     }
 
     handleStart = function(ev) {    
